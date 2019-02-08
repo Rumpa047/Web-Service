@@ -18,9 +18,10 @@ data_table = db.properties
 
 class Page(Resource):
     def get(self):
-
-        feed = request.args['feed_ratio']
-        return eval(feed)
+        if 'feed_ratio' in request.args:
+            feed = request.args['feed_ratio']
+            feed = eval(feed)
+            return feed[0]['ratio'], feed[0]['feed']
         # rto = []
         # for i in eval(feed):
         #     if 'ratio' in i:
@@ -28,7 +29,7 @@ class Page(Resource):
         # return rto
 
 
-        if 'page' not in request.args:
+        elif 'page' not in request.args:
             output = []
             for item in data_table.find():
                 output.append({'property_name': item['property_name'], 'Feed': item['feed'], 'Price': item['price']})

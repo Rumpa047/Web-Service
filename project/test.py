@@ -1,14 +1,29 @@
 import requests
 from pymongo import MongoClient
 import pytest
-
+import run
 
 
 def test_status_code():
-    req = requests.get('http://127.0.0.1:5000/api/properties')
-    assert req.status_code == 200
+    app = run.create_app()
+    clint = app.test_client()
+    res = clint.get('api/properties')
+    assert res.status_code == 200
+
+def test_page_items():
+    app = run.create_app()
+    clint = app.test_client()
+    res = clint.get('api/properties?page=1')
+    data = res.get_json()
+    assert len(data['result']) == 48
 
 
+def test_empty_page():
+    app = run.create_app()
+    clint = app.test_client()
+    res = clint.get('api/properties?page=6')
+    data = res.get_json()
+    assert len(data['result']) == 0
 
 # def test_empty_db():
 #     """Start with a blank database."""
