@@ -1,17 +1,14 @@
 import requests
-from flask import Flask
 from pymongo import MongoClient
 import pytest
-import run
-from resources.all_properties import Page
-
-
 
 
 
 def test_status_code():
     req = requests.get('http://127.0.0.1:5000/api/properties')
     assert req.status_code == 200
+
+
 
 # def test_empty_db():
 #     """Start with a blank database."""
@@ -66,7 +63,13 @@ def test_status_code():
 #
 #     manuel = mongodb.players.find_one({'name': 'Manuel'})
 #     assert manuel['surname'] == 'Neuer'
-
+# def test_request():
+#     req = requests.get('http://127.0.0.1:5000/api/properties?page=1')
+#     assert req.request.args['page'] == '1'
+#     # app = create_app()
+#     # assert app.requests.path == "/api/properties"
+#     # # assert run.request.args['page'] == '1'
+#     # assert Page.requests.path == "/api/properties"
 # def f():
 #     return 3
 #

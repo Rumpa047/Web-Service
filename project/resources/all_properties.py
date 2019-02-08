@@ -1,5 +1,5 @@
 from flask_restful import Resource 
-from flask import Flask
+from flask import Flask, jsonify,json
 from pymongo import MongoClient
 from flask import request
 
@@ -18,6 +18,14 @@ data_table = db.properties
 
 class Page(Resource):
     def get(self):
+
+        feed = request.args['feed_ratio']
+        return eval(feed)
+        # rto = []
+        # for i in eval(feed):
+        #     if 'ratio' in i:
+        #         rto.append(i.ratio)
+        # return rto
 
 
         if 'page' not in request.args:
