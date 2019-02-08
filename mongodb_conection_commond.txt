@@ -1,0 +1,121 @@
+Microsoft Windows [Version 10.0.17134.556]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\WINDOWS\system32>cd..
+
+C:\Windows>cd..
+
+C:\>cd C:\mongodb\bin
+
+C:\mongodb\bin>mongod --directoryperdb --dbpath C:\mongodb\data\db --logpath C:\mongodb\log\mongo.log --logappend --rest --install
+Error parsing command line: unrecognised option '--rest'
+try 'mongod --help' for more information
+
+C:\mongodb\bin>mongod --directoryperdb --dbpath C:\mongodb\data\db --logpath C:\mongodb\log\mongo.log --logappend --install
+
+C:\mongodb\bin>net start MongoDB
+The service is not responding to the control function.
+
+More help is available by typing NET HELPMSG 2186.
+
+
+C:\mongodb\bin>mongod --directoryperdb -dbpath C:\mongodb\data\db --logpath C:\mongodb\log\mongo.log --logappend --service --install
+
+C:\mongodb\bin>net start MongoDB
+The service is not responding to the control function.
+
+More help is available by typing NET HELPMSG 2186.
+
+
+C:\mongodb\bin>mongod --remove
+2019-02-06T00:08:34.155-0700 I CONTROL  [main] Automatically disabling TLS 1.0, to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'
+2019-02-06T00:08:34.158-0700 I CONTROL  [main] Trying to remove Windows service 'MongoDB'
+2019-02-06T00:08:34.159-0700 I CONTROL  [main] Service 'MongoDB' removed
+
+C:\mongodb\bin>mongod --directoryperdb -dbpath C:\mongodb\data\db --logpath C:\mongodb\log\mongo.log --logappend --service --install
+
+C:\mongodb\bin>net start MongoDB
+The MongoDB service is starting...
+The MongoDB service was started successfully.
+
+
+C:\mongodb\bin>mongo
+MongoDB shell version v4.0.5
+connecting to: mongodb://127.0.0.1:27017/?gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("58d3e511-3d91-463f-9b28-95151acbc941") }
+MongoDB server version: 4.0.5
+Server has startup warnings:
+2019-02-06T13:08:55.352+0600 I CONTROL  [initandlisten]
+2019-02-06T13:08:55.352+0600 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2019-02-06T13:08:55.352+0600 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2019-02-06T13:08:55.352+0600 I CONTROL  [initandlisten]
+2019-02-06T13:08:55.352+0600 I CONTROL  [initandlisten] ** WARNING: This server is bound to localhost.
+2019-02-06T13:08:55.352+0600 I CONTROL  [initandlisten] **          Remote systems will be unable to connect to this server.
+2019-02-06T13:08:55.352+0600 I CONTROL  [initandlisten] **          Start the server with --bind_ip <address> to specify which IP
+2019-02-06T13:08:55.353+0600 I CONTROL  [initandlisten] **          addresses it should serve responses from, or with --bind_ip_all to
+2019-02-06T13:08:55.353+0600 I CONTROL  [initandlisten] **          bind to all interfaces. If this behavior is desired, start the
+2019-02-06T13:08:55.353+0600 I CONTROL  [initandlisten] **          server with --bind_ip 127.0.0.1 to disable this warning.
+2019-02-06T13:08:55.353+0600 I CONTROL  [initandlisten]
+---
+Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+and anyone you share the URL with. MongoDB may use this information to make product
+improvements and to suggest MongoDB products and deployment options to you.
+
+To enable free monitoring, run the following command: db.enableFreeMonitoring()
+To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+>
+//for clean cmd
+>cls
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> use properties
+switched to db properties
+> db
+properties
+> db.copyDatabase('properties', 'mypropertydb')
+WARNING: db.copyDatabase is deprecated. See http://dochub.mongodb.org/core/copydb-clone-deprecation
+{
+        "note" : "Support for the copydb command has been deprecated. See http://dochub.mongodb.org/core/copydb-clone-deprecation",
+        "ok" : 1
+}
+> use properties
+switched to db properties
+> db.dropDatabase()
+{ "ok" : 1 }
+> db
+properties
+>  mongodump -d properties -o mongodump/
+2019-02-06T14:06:10.644+0600 E QUERY    [js] SyntaxError: missing ; before statement @(shell):1:13
+> mongorestore -d mypropertydb mongodump/properties
+2019-02-06T14:07:50.180+0600 E QUERY    [js] SyntaxError: missing ; before statement @(shell):1:16
+> db
+properties
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> use mypropertydb
+switched to db mypropertydb
+> db
+mypropertydb
+> db.createUser(
+...    {
+...      user: "rumpa",
+...      pwd: "1234",
+...      roles: [ "readWrite", "dbAdmin" ]
+...    }
+... )
+Successfully added user: { "user" : "rumpa", "roles" : [ "readWrite", "dbAdmin" ] }
+> db.createCollection('properties');
+{ "ok" : 1 }
+> show collections
+properties
+>db.properties.inssert([{},{},{}]);
+>db.properties.find().pretty()
+>db.properties.find().count();
