@@ -25,6 +25,26 @@ def test_empty_page():
     data = res.get_json()
     assert len(data['result']) == 0
 
+def test_collection_items():
+    conn = MongoClient()
+    db = conn.mypropertydb
+    data_table = db.properties
+    items = 0
+    for item in  data_table.find():
+        items+=1
+
+    app = run.create_app()
+    clint = app.test_client()
+    res = clint.get('api/properties')
+    data = res.get_json()
+
+    assert items == len(data['result'])
+
+
+
+
+
+
 # def test_empty_db():
 #     """Start with a blank database."""
 #     rv = requests.get('http://127.0.0.1:5000/api/properties')
@@ -41,14 +61,8 @@ def test_empty_page():
 #         item+=1
 #     assert item == 3
 #
-# def test_collection_items():
-#     conn = MongoClient()
-#     db = conn.mypropertydb
-#     data_table = db.properties
-#     # items = db.properties.count()
-#     items = data_table.find().count()
-#     assert items == 146
-#
+
+
 # def test_db_port():
 #     conn = MongoClient()
 #     db = conn.mypropertydb
