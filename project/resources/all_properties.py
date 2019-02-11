@@ -39,33 +39,127 @@ class Page(Resource):
             position_12 = (int(page) - 1) * feed_12
             position_16 = (int(page) - 1) * feed_16
 
-            for i in range(position_11, position_11 + feed_11):
+            limit_11 = position_11 + feed_11
+            limit_12 = position_12 + feed_12
+            limit_16 = position_16 + feed_16
+       
+            if len(lst_11) < limit_11:
+                # count = limit_11 - len(lst_11)
+                # if count > feed_11:
+                #     count = feed_11
+                limit_11 = len(lst_11)
+
+            if len(lst_12) < limit_12:
+                limit_12 = len(lst_12)
+
+            if len(lst_16) < limit_16:
+                limit_16 = len(lst_16)
+
+
+            for i in range(position_11, limit_11):
                 output.append(lst_11[i])
             
-            for i in range(position_12, position_12 + feed_12):
+            for i in range(position_12, limit_12):
                 output.append(lst_12[i])
 
-            for i in range(position_16, position_16 + feed_16):
+            for i in range(position_16, limit_16):
                 output.append(lst_16[i])
             
 
-            
-            return output
-            # return feed[0]['ratio'], feed[0]['feed']
-        # rto = []
-        # for i in eval(feed):
-        #     if 'ratio' in i:
-        #         rto.append(i.ratio)
-        # return rto
+            if len(output) < 48 and len(output) > 0 :
+                count = 48 - len(output)
+                x = max(limit_11,limit_12,limit_16)
+
+                if x == len(lst_11) and len(lst_11) > limit_11:
+                    for i in range(limit_11, len(lst_11)):
+                        output.append(lst_11[i])
+                        count-=1
+                        if count == 0:
+                            break
+                    if len(output) < 48:
+                        if len(lst_12) > len(lst_16) and len(lst_12) > limit_12:
+                            for i in range(limit_12, len(lst_12)):
+                                output.append(lst_12[i])
+                                count-=1
+                                if count == 0:
+                                    break
+                        elif len(lst_16) > len(lst_12) and len(lst_16) > limit_16:
+                            for i in range(limit_16, len(lst_16)):
+                                output.append(lst_16[i])
+                                count-=1
+                                if count == 0:
+                                    break
+                        else:
+                            pass
+                    else:
+                        pass    
 
 
-        elif 'page' not in request.args:
+                elif x == len(lst_12) and len(lst_12) > limit_12:
+                    for i in range(limit_12, len(lst_12)):
+                        output.append(lst_12[i])
+                        count-=1
+                        if count == 0:
+                            break
+                    if len(output) < 48:
+                        if len(lst_11) > len(lst_16) and len(lst_11) > limit_11:
+                            for i in range(limit_11, len(lst_11)):
+                                output.append(lst_11[i])
+                                count-=1
+                                if count == 0:
+                                    break
+                        elif len(lst_16) > len(lst_11) and len(lst_16) > limit_16:
+                            for i in range(limit_16, len(lst_16)):
+                                output.append(lst_16[i])
+                                count-=1
+                                if count == 0:
+                                    break
+                        else:
+                            pass   
+                    else:
+                        pass     
+                
+                elif x == len(lst_16) and len(lst_16) > limit_16:
+                    for i in range(limit_16, len(lst_16)):
+                        output.append(lst_16[i])
+                        count-=1
+                        if count == 0:
+                            break
+                    if len(output) < 48:
+                        if len(lst_11) > len(lst_12) and len(lst_11) > limit_11:
+                            for i in range(limit_11, len(lst_11)):
+                                output.append(lst_11[i])
+                                count-=1
+                                if count == 0:
+                                    break
+                        elif len(lst_12) > len(lst_11) and len(lst_12) > limit_12:
+                            for i in range(limit_12, len(lst_12)):
+                                output.append(lst_12[i])
+                                count-=1
+                                if count == 0:
+                                    break
+                        else:
+                            pass         
+                    else:
+                        pass     
+                else:
+                    pass  
+
+            else:
+                pass
+          
+            return {'result': output}
+            # return len(lst_16)
+
+
+        elif 'page' not in request.args and 'feed_ratio' not in request.args :
             output = []
             for item in data_table.find():
                 output.append({'property_name': item['property_name'], 'Feed': item['feed'], 'Price': item['price']})
             return {'result': output}
 
-        else:
+
+        elif 'page' in request.args and 'feed_ratio' not in request.args:
             page_number = request.args['page']
             output = []
             x = (int(page_number) - 1) * 48
