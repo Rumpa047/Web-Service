@@ -3,4 +3,4 @@ Flask-PyMongo
 Flask_restful
 requests 
 pytest
-flaskr
+
